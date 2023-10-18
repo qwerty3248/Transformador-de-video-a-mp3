@@ -1,0 +1,3 @@
+sudo apt install ffmpeg
+
+Debes instalar esto primero jiji
