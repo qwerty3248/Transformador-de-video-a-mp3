@@ -176,20 +176,18 @@ bool init_filters(const std::string& filters_descr, AVFormatContext* input_forma
         return false;
     }
 
-    AVFilterContext* buffersrc_ctx_tmp = nullptr;
-    AVFilterContext* buffersink_ctx_tmp = nullptr;
+    AVFilterContext* buffersrc_ctx = nullptr;
+AVFilterContext* buffersink_ctx = nullptr;
 
-    if (avfilter_graph_create_filter(&buffersrc_ctx_tmp, buffersrc, "in", nullptr, nullptr, 
-        *filter_graph) < 0 ||
-    avfilter_graph_create_filter(&buffersink_ctx_tmp, buffersink, "out", nullptr, nullptr, 
-        *filter_graph) < 0) {
+if (avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in", nullptr, nullptr, *filter_graph) < 0 ||
+    avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out", nullptr, nullptr, *filter_graph) < 0) {
     std::cerr << "Error creating filter contexts" << std::endl;
     return false;
 }
 
 
-    AVFilterContext* buffersrc_ctx = const_cast<AVFilterContext*>(buffersrc_ctx_tmp);
-    AVFilterContext* buffersink_ctx = const_cast<AVFilterContext*>(buffersink_ctx_tmp);
+    AVFilterContext* buffersrc_ctx = const_cast<AVFilterContext*>(buffersrc_ctx);
+    AVFilterContext* buffersink_ctx = const_cast<AVFilterContext*>(buffersink_ctx);
 
     char args[512];
     AVPixelFormat pix_fmts[] = { AV_PIX_FMT_BGR0, AV_PIX_FMT_NONE };
@@ -197,14 +195,12 @@ bool init_filters(const std::string& filters_descr, AVFormatContext* input_forma
     args_stream << "time_base=" << input_format_context->streams[input_stream->index]->time_base.num << '/'
                 << input_format_context->streams[input_stream->index]->time_base.den << ":sample_rate="
                 << input_format_context->streams[input_stream->index]->codecpar->sample_rate << ":sample_fmt="
-                << av_get_sample_fmt_name(input_format_context->streams[input_stream->index]->codecpar->format)
+                << << av_get_sample_fmt_name(static_cast<AVSampleFormat>(input_format_context->streams[input_stream->index]->codecpar->format)))
                 << ":channel_layout=0x" << std::hex
                 << input_format_context->streams[input_stream->index]->codecpar->channel_layout << std::dec;
 
-    avfilter_graph_create_filter(buffersrc_ctx, buffersrc, "in", args_stream.str().c_str(), 
-                                 nullptr, *filter_graph);
-    avfilter_graph_create_filter(buffersink_ctx, buffersink, "out", nullptr, nullptr, 
-                                 *filter_graph);
+    avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in", args_stream.str().c_str(), nullptr, graph_ctx);
+    avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out", nullptr, nullptr, graph_ctx);
 
 
     AVFilterInOut* inputs_tmp = inputs;
@@ -230,8 +226,8 @@ bool init_filters(const std::string& filters_descr, AVFormatContext* input_forma
         return false;
     }
 
-    buffersrc_ctx = const_cast<AVFilterContext*>(buffersrc_ctx_tmp);
-    buffersink_ctx = const_cast<AVFilterContext*>(buffersink_ctx_tmp);
+    buffersrc_ctx = const_cast<AVFilterContext*>(buffersrc_ctx);
+    buffersink_ctx = const_cast<AVFilterContext*>(buffersink_ctx);
 
 
     return true;
@@ -317,7 +313,8 @@ int main(int argc, char* argv[]) {
     }
 
     // Flush the encoder
-    if (!encode_audio_frame(nullptr, packet, output_stream->codec, output_format_context)) {
+    if (!encode_audio_frame(nullptr, packet, output_stream->codecpar->codec_id,
+        output_format_context)) {
         return 1;
     }
 
