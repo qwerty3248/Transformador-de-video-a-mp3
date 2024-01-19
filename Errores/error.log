@@ -24,7 +24,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'Videos/piano_chio.mp4':
 Stream mapping:
   Stream #0:1 -> #0:0 (aac (native) -> mp3 (libmp3lame))
 Press [q] to stop, [?] for help
-Output #0, mp3, to 'mp3/piano_chio.mp3':
+Output #0, mp3, to 'mp3/piano_chio_2.mp3':
   Metadata:
     major_brand     : mp42
     minor_version   : 0
@@ -34,5 +34,5 @@ Output #0, mp3, to 'mp3/piano_chio.mp3':
     Metadata:
       vendor_id       : [0][0][0][0]
       encoder         : Lavc58.134.100 libmp3lame
-size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    size=     235kB time=00:00:14.95 bitrate= 128.6kbits/s speed=29.9x    size=     256kB time=00:00:30.69 bitrate=  68.3kbits/s speed=30.7x    size=     512kB time=00:00:46.53 bitrate=  90.1kbits/s speed=  31x    size=     870kB time=00:00:55.60 bitrate= 128.2kbits/s speed=31.5x    
+size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    size=     256kB time=00:00:22.80 bitrate=  92.0kbits/s speed=45.6x    size=     512kB time=00:00:46.48 bitrate=  90.2kbits/s speed=46.5x    size=     870kB time=00:00:55.60 bitrate= 128.2kbits/s speed=47.4x    
 video:0kB audio:870kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.037058%

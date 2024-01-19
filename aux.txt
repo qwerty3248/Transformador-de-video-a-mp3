@@ -1,0 +1,1 @@
+Okey con mplayer puedes escuchar el audio desde la terminal al igual que los videos, mplayer <path/al/video/o/audio>
